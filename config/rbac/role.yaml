@@ -30,7 +30,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - apps.prophix.cloud
+  - apps.google.com
   resources:
   - websites
   verbs:
@@ -42,13 +42,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - apps.prophix.cloud
+  - apps.google.com
   resources:
   - websites/finalizers
   verbs:
   - update
 - apiGroups:
-  - apps.prophix.cloud
+  - apps.google.com
   resources:
   - websites/status
   verbs:

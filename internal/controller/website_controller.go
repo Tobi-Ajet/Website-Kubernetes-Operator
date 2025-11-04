@@ -54,14 +54,14 @@ type WebsiteReconciler struct {
 }
 
 // RBAC markers:
-//+kubebuilder:rbac:groups=apps.prophix.cloud,resources=websites,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=apps.prophix.cloud,resources=websites/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=apps.prophix.cloud,resources=websites/finalizers,verbs=update
-//+kubebuilder:rbac:groups="",resources=configmaps;services,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=apps.google.com,resources=websites,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=apps.google.com,resources=websites/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=apps.gooogle.com,resources=websites/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=configmaps;services,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 
 func (r *WebsiteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
 	var site appsv1alpha1.Website
 	if err := r.Get(ctx, req.NamespacedName, &site); err != nil {
@@ -113,7 +113,7 @@ func (r *WebsiteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	_, err = controllerutil.CreateOrUpdate(ctx, r.Client, deploy, func() error {
 		deploy.Spec.Replicas = &replicas
 		deploy.Spec.Selector = &metav1.LabelSelector{MatchLabels: labels}
-		deploy.Spec.Template.ObjectMeta.Labels = labels
+		deploy.Spec.Template.Labels = labels
 		deploy.Spec.Template.Spec.Containers = []corev1.Container{
 			{
 				Name:  "nginx",
@@ -188,7 +188,7 @@ func (r *WebsiteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, err
 	}
 
-	log.Info("reconciled Website", "name", site.Name, "available", site.Status.AvailableReplicas)
+	logger.Info("reconciled Website", "name", site.Name, "available", site.Status.AvailableReplicas)
 	return ctrl.Result{}, nil
 }
 
