@@ -1,0 +1,16 @@
+apiVersion: apps.google.com/v1alpha1
+kind: Website
+metadata:
+  labels:
+    app.kubernetes.io/name: website-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: website-sample
+  namespace: default
+spec:
+  replicas: 2
+  indexHTML: |
+    <html>
+      <head><title>Hello</title></head>
+      <body><h1>Hello from the Website Operator 👋</h1></body>
+    </html>
+  serviceType: ClusterIP
