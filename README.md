@@ -67,7 +67,7 @@ make run
 # Apply sample
 kubectl apply -f config/samples/apps_v1alpha1_website.yaml
 
-
+```
 ---
 
 ## 🧠 Key Learnings
