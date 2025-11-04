@@ -58,13 +58,13 @@ It’s like teaching Kubernetes how to host a website on its own.”
 ## 🧑‍💻 Commands
 
 ``
-# Install CRD
+#Install CRD
 make install
 
-# Run operator locally
+#Run operator locally
 make run
 
-# Apply sample
+#Apply sample
 kubectl apply -f config/samples/apps_v1alpha1_website.yaml
 ``
 
