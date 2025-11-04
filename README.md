@@ -32,9 +32,11 @@ spec:
   serviceType: ClusterIP
 ```
 Apply and access it:
+
+```bash
 kubectl apply -f config/samples/apps_v1alpha1_website.yaml
 kubectl port-forward svc/website-sample-svc 8080:80
-
+```
 
 Then open: http://localhost:8080 🎉
 
