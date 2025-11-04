@@ -36,7 +36,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
 	appsv1alpha1 "github.com/Tobi-Ajet/Website-Kubernetes-Operator/api/v1alpha1"
-	"github.com/Tobi-Ajet/Website-Kubernetes-Operator/internal/controller"
+	controller "github.com/Tobi-Ajet/Website-Kubernetes-Operator/internal/controller"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -178,7 +178,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := (&controller.WebsiteReconciler{
+	if err = (&controller.WebsiteReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {

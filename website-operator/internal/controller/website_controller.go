@@ -24,11 +24,13 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/utils/ptr"
+
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
@@ -36,18 +38,18 @@ import (
 )
 
 const (
-	webPort         = 8080
-	indexKey        = "index.html"
-	cmNameSuffix    = "-content"
-	deployNameSfx   = "-deploy"
-	svcNameSfx      = "-svc"
-	defaultImage    = "nginx:1.27-alpine"
-	labelKey        = "app.kubernetes.io/name"
+	webPort       = 8080
+	indexKey      = "index.html"
+	cmNameSuffix  = "-content"
+	deployNameSfx = "-deploy"
+	svcNameSfx    = "-svc"
+	defaultImage  = "nginx:1.27-alpine"
+	labelKey      = "app.kubernetes.io/name"
 )
 
 // WebsiteReconciler reconciles a Website object
 type WebsiteReconciler struct {
-	ctrl.Client
+	client.Client
 	Scheme *runtime.Scheme
 }
 
@@ -161,7 +163,7 @@ func (r *WebsiteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		svc.Spec.Ports = []corev1.ServicePort{{
 			Name:       "http",
 			Port:       80,
-			TargetPort: intstr.FromInt(webPort),
+			TargetPort: intstr.FromInt(80),
 		}}
 		return controllerutil.SetControllerReference(&site, svc, r.Scheme)
 	})
