@@ -31,7 +31,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	appsv1alpha1 "github.com/youruser/website-operator/api/v1alpha1"
+	appsv1alpha1 "github.com/Tobi-Ajet/Website-Kubernetes-Operator/api/v1alpha1"
 )
 
 const (
