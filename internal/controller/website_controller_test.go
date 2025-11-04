@@ -38,36 +38,43 @@ var _ = Describe("Website Controller", func() {
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
+			Namespace: "default",
 		}
 		website := &appsv1alpha1.Website{}
 
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind Website")
+
 			err := k8sClient.Get(ctx, typeNamespacedName, website)
 			if err != nil && errors.IsNotFound(err) {
+				replicas := int32(1)
 				resource := &appsv1alpha1.Website{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
 					},
-					// TODO(user): Specify other spec details if needed.
+					Spec: appsv1alpha1.WebsiteSpec{
+						Replicas:    &replicas,
+						IndexHTML:   "<html><body><h1>Test Website</h1></body></html>",
+						ServiceType: "ClusterIP",
+					},
 				}
 				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
 			}
 		})
 
 		AfterEach(func() {
-			// TODO(user): Cleanup logic after each test, like removing the resource instance.
+			By("cleaning up the specific Website resource instance")
 			resource := &appsv1alpha1.Website{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
-			Expect(err).NotTo(HaveOccurred())
-
-			By("Cleanup the specific resource instance Website")
-			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+			if err == nil {
+				Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+			}
 		})
+
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
+
 			controllerReconciler := &WebsiteReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
@@ -77,8 +84,13 @@ var _ = Describe("Website Controller", func() {
 				NamespacedName: typeNamespacedName,
 			})
 			Expect(err).NotTo(HaveOccurred())
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
+
+			// Verify that the resource exists and has expected fields
+			fetched := &appsv1alpha1.Website{}
+			Expect(k8sClient.Get(ctx, typeNamespacedName, fetched)).To(Succeed())
+			Expect(fetched.Spec.Replicas).NotTo(BeNil())
+			Expect(*fetched.Spec.Replicas).To(Equal(int32(1)))
+			Expect(fetched.Spec.IndexHTML).To(ContainSubstring("Test Website"))
 		})
 	})
 })
