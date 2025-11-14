@@ -86,11 +86,6 @@ kubectl apply -f config/samples/apps_v1alpha1_website.yaml
 - Add health/status conditions in the Website CRD.
 - Package and deploy the operator as a container inside the cluster.
 
----
-
-## ✨ Author
-👤 Tobi Ajetomobi (Tobi-Ajet)
-💼 Cloud & Platform Engineer
 
 ---
 
